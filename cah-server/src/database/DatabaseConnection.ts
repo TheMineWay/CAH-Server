@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import getConf from "src/conf/Conf";
+import configurationInit from "./definitions/Configuration.definition";
 
 // Inits
 import userInit from "./definitions/User.definition";
@@ -35,6 +36,7 @@ export default async function databaseConnect() {
 const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
     return [
         userInit,
+        configurationInit,
     ];
 }
 

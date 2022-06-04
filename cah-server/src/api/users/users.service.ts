@@ -6,6 +6,8 @@ import { UserModel } from 'src/models/database/User.model';
 export class UsersService {
     async findOne(login: string): Promise<UserModel | undefined> {
         const userRepository = new UserRepository({ transaction: null });
-        return (await userRepository.getByLogin(login)).get();
+        const user = (await userRepository.getByLogin(login)).get();
+        await userRepository.commit();
+        return user;
     }
 }

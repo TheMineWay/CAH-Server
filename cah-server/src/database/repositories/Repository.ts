@@ -13,8 +13,8 @@ export type RepositoryQueryOptions<T> = {
     includePagination?: PaginatedRequestOptions<T>;
 }
 
-export function repositoryException(e: any) {
-    databaseQueryException(e);
+export type SequelizeQueryOptions = {
+    transaction: Transaction;
 }
 
 /**
@@ -70,7 +70,6 @@ export default abstract class Repository<T, K> {
         const paginatedOptions = new PaginatedRequestOptions<T>(options);
 
         return {
-            transaction: await this.getTransaction(),
             where: paginatedOptions.where(),
             limit: paginatedOptions.limit,
             offset: paginatedOptions.offset,
@@ -78,9 +77,29 @@ export default abstract class Repository<T, K> {
         };
     }
 
-    protected async opts(options: RepositoryQueryOptions<T>): Promise<FindOptions<T>> {
+    protected async opts(options?: RepositoryQueryOptions<T>): Promise<FindOptions<T>> {
+        if (!options) return {};
+
         return {
             ...(await this.getPaginatedRequestOps(options.includePagination)),
         };
+    }
+
+    protected async secureContext<T>(func: (o: SequelizeQueryOptions) => Promise<T>, opts?: {
+        autoCommit?: boolean;
+    }): Promise<T> {
+        try {
+            const result = await func({
+                transaction: await this.getTransaction(),
+            });
+
+            // Hardly used, but it might be useful some day
+            if(opts?.autoCommit) await this.commit();
+            
+            return result;
+        } catch(e: any) {
+            await this.rollback();
+            databaseQueryException(e);
+        }
     }
 }
