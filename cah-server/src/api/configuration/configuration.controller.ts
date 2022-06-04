@@ -1,4 +1,5 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { ConfigurationCreateDTO } from 'src/models/dtos/ConfigurationCreate.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ConfigurationService } from './configuration.service';
 
@@ -13,7 +14,7 @@ export class ConfigurationController {
     }
 
     @Post()
-    async set() {
-        await this.configurationService.setConfiguration();
+    async set(@Body(new ValidationPipe()) setConfiguration: ConfigurationCreateDTO) {
+        await this.configurationService.setConfiguration(setConfiguration);
     }
 }
