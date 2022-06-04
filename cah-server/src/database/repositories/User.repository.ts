@@ -2,7 +2,7 @@ import { PaginatedRequestProps } from "../DatabasePagination";
 import { UserAttributes, UserCreateAttributes, UserDefinition, UserUpdateAttributes } from "../definitions/User.definition";
 import Repository, { RepositoryOptions, RepositoryQueryOptions } from "./Repository";
 
-export default class UserRepository extends Repository<UserAttributes, UserCreateAttributes> {
+export default class UserRepository extends Repository<UserAttributes, UserCreateAttributes, UserDefinition> {
 
     public constructor(options: RepositoryOptions) {
         super(options);
