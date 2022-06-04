@@ -15,7 +15,7 @@ export class ConfigurationService {
 
     async setConfiguration(data: ConfigurationCreateAttributes) {
         const configurationRepository = new ConfigurationRepository({});
-        const conf = (await configurationRepository.createOrUpdate(data)).get();
+        const conf = (await configurationRepository.createOrUpdate(data))?.get();
         await configurationRepository.commit();
         return conf;
     }

@@ -21,7 +21,7 @@ export default class ConfigurationRepository extends Repository<ConfigurationAtt
                 ...o,
             });
 
-            if(current.get()) {
+            if(current?.get()) {
                 return await current.update(data);
             } else {
                 return await ConfigurationDefinition.create(data, {
