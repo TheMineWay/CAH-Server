@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import getConf from "src/conf/Conf";
 import configurationInit from "./definitions/Configuration.definition";
+import playerInit from "./definitions/Player.definition";
 
 // Inits
 import userInit from "./definitions/User.definition";
@@ -37,6 +38,7 @@ const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
     return [
         userInit,
         configurationInit,
+        playerInit,
     ];
 }
 
