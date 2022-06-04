@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ConfigurationService } from './configuration.service';
 
@@ -10,5 +10,10 @@ export class ConfigurationController {
     @Get()
     async get() {
         return await this.configurationService.getConfiguration();
+    }
+
+    @Post()
+    async set() {
+        await this.configurationService.setConfiguration();
     }
 }
