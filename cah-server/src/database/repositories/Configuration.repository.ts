@@ -7,14 +7,19 @@ export default class ConfigurationRepository extends Repository<ConfigurationAtt
         super(options);
     }
 
-    public async update(id: string, data: ConfigurationUpdateAttributes) {
+    public async createOrUpdate(data: ConfigurationUpdateAttributes) {
         return await this.secureContext(async (o) => {
-            return await ConfigurationDefinition.update(data, {
-                where: {
-                    id,
-                },
+            const current = await ConfigurationDefinition.findOne({
                 ...o,
             });
+
+            if(current.get()) {
+                return await current.update(data);
+            } else {
+                return await ConfigurationDefinition.create(data, {
+                    ...o,
+                });
+            }
         });
     }
 }
