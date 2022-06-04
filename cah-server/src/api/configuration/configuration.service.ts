@@ -6,6 +6,7 @@ import ConfigurationRepository from 'src/database/repositories/Configuration.rep
 export class ConfigurationService {
     constructor() {}
 
+    // Must protect
     async getConfiguration() {
         const configurationRepository = new ConfigurationRepository({});
         const conf = (await configurationRepository.getCurrent())?.get() ?? undefined;
@@ -13,6 +14,7 @@ export class ConfigurationService {
         return conf;
     }
 
+    // Must protect
     async setConfiguration(data: ConfigurationCreateAttributes) {
         const configurationRepository = new ConfigurationRepository({});
         const conf = (await configurationRepository.createOrUpdate(data))?.get();
