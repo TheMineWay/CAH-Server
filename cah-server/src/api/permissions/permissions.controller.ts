@@ -1,5 +1,6 @@
-import { Body, Controller, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, ValidationPipe, Request } from '@nestjs/common';
 import { SetAdminStateDTO } from 'src/models/dtos/Permission.dtos';
+import isAdmin from 'src/permissions/PermissionsChecker';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import PermissionsService from './permissions.service';
 
@@ -8,9 +9,9 @@ import PermissionsService from './permissions.service';
 export class PermissionsController {
     constructor(private readonly permissionsService: PermissionsService) { }
 
-    // Protect
     @Post('setAdminState')
-    async setAdminState(@Body(new ValidationPipe()) body: SetAdminStateDTO) {
+    async setAdminState(@Body(new ValidationPipe()) body: SetAdminStateDTO, @Request() req) {
+        await isAdmin(req.user.id);
         await this.permissionsService.setAdminState(body.userId, body.isAdmin);
     }
 }
