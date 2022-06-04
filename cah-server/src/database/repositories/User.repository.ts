@@ -1,6 +1,6 @@
 import { PaginatedRequestProps } from "../DatabasePagination";
 import { UserAttributes, UserCreateAttributes, UserDefinition, UserUpdateAttributes } from "../definitions/User.definition";
-import Repository, { repositoryException, RepositoryOptions, RepositoryQueryOptions } from "./Repository";
+import Repository, { RepositoryOptions, RepositoryQueryOptions } from "./Repository";
 
 export default class UserRepository extends Repository<UserAttributes, UserCreateAttributes> {
 
@@ -9,120 +9,97 @@ export default class UserRepository extends Repository<UserAttributes, UserCreat
     }
 
     async getAll(options?: RepositoryQueryOptions<UserAttributes>) {
-        try {
+        return await this.secureContext(async (o) => {
             return UserDefinition.findAll({
                 ...await this.opts(options),
+                ...o,
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        });
     }
 
     async getAllPaginated(pagination: PaginatedRequestProps<UserAttributes>) {
-        try {
-            return UserDefinition.findAll(
-                await this.getPaginatedRequestOps(pagination),
-            );
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        return await this.secureContext(async (o) => {
+            return UserDefinition.findAll({
+                ...await this.getPaginatedRequestOps(pagination),
+                ...o,
+            });
+        });
     }
 
     async getById(id: string, options?: RepositoryQueryOptions<UserAttributes>) {
-        try {
+        return await this.secureContext(async (o) => {
             return UserDefinition.findByPk(id, {
                 ...await this.opts(options),
+                ...o,
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        });
     }
 
     async getAdminById(id: string, options?: RepositoryQueryOptions<UserAttributes>) {
-        try {
+        return await this.secureContext(async (o) => {
             return await UserDefinition.findOne({
                 where: {
                     id,
                     isAdmin: true,
                 },
+                ...o,
                 ...await this.opts(options),
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        });
     }
 
     async getByLogin(login: string, options?: RepositoryQueryOptions<UserAttributes>) {
-        try {
+        return await this.secureContext(async (o) => {
             return UserDefinition.findOne({
                 where: {
                     login,
                 },
+                ...o,
                 ...await this.opts(options),
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        });
     }
 
     async create(user: UserCreateAttributes) {
-        try {
+        return await this.secureContext(async (o) => {
             return await UserDefinition.create(user, {
-                transaction: await this.getTransaction(),
+                ...o,
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        });
     }
 
     async update(id: string, user: UserUpdateAttributes) {
-        try {
+        return await this.secureContext(async (o) => {
             return await UserDefinition.update(user, {
                 where: {
                     id,
                 },
-                transaction: await this.getTransaction(),
+                ...o,
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        });
     }
 
     async delete(id: string) {
-        try {
+        return await this.secureContext(async (o) => {
             return await UserDefinition.destroy({
                 where: {
                     id,
                 },
-                transaction: await this.getTransaction(),
+                ...o,
             });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+        })
     }
 
     async changeRole(userId: string, roles: { isAdmin?: boolean }) {
-        try {
+        return await this.secureContext(async (o) => {
             return await UserDefinition.update({
                 isAdmin: roles.isAdmin,
-            },
-                {
-                    where: {
-                        id: userId,
-                    },
-                    transaction: await this.getTransaction(),
-                });
-        } catch (e: any) {
-            await this.rollback();
-            repositoryException(e);
-        }
+            }, {
+                where: {
+                    id: userId,
+                },
+                ...o,
+            });
+        });
     }
 }

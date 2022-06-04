@@ -12,6 +12,8 @@ export class ConfigurationAttributes extends ConfigurationCreateAttributes {
     declare deletedAt?: Date;
 }
 
+export class ConfigurationUpdateAttributes extends ConfigurationCreateAttributes {}
+
 export class ConfigurationDefinition extends Model<ConfigurationAttributes, ConfigurationCreateAttributes> {}
 
 export default async function init(sequelize: Sequelize) {
