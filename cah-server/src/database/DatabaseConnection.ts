@@ -1,10 +1,10 @@
 import { Sequelize } from "sequelize";
 import getConf from "src/conf/Conf";
 import configurationInit from "./definitions/Configuration.definition";
-import playerInit from "./definitions/Player.definition";
+import playerInit, { PlayerDefinition } from "./definitions/Player.definition";
 
 // Inits
-import userInit from "./definitions/User.definition";
+import userInit, { UserDefinition } from "./definitions/User.definition";
 
 export default async function databaseConnect() {
 
@@ -43,7 +43,13 @@ const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
 }
 
 const associate = () => {
-    
+    // Users <--[1:n]--> Players
+    UserDefinition.hasMany(PlayerDefinition, {
+        foreignKey: 'user',
+    });
+    PlayerDefinition.belongsTo(UserDefinition, {
+        foreignKey: 'user',
+    });
 }
 export class DatabaseState {
     static sequelize: Sequelize;
