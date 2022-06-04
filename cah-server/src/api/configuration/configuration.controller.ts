@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards, ValidationPipe } from '@nestjs/common';
-import { ConfigurationCreateDTO } from 'src/models/dtos/ConfigurationCreate.dto';
+import { ConfigurationCreateDTO } from 'src/models/dtos/Configuration.dtos';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ConfigurationService } from './configuration.service';
 
