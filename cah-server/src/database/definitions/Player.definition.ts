@@ -1,6 +1,12 @@
 import { Model, Sequelize, DataTypes } from "sequelize";
+import { UserDefinition } from "./User.definition";
 
-export class PlayerCreateAttributes {}
+export class PlayerCreateAttributes {
+
+    // Associations
+
+    declare user: string;
+}
 
 export class PlayerAttributes extends PlayerCreateAttributes {
     declare id: string;
@@ -10,7 +16,9 @@ export class PlayerAttributes extends PlayerCreateAttributes {
     declare deletedAt?: Date;
 }
 
-export class PlayerDefinition extends Model<PlayerAttributes, PlayerCreateAttributes> {}
+export class PlayerDefinition extends Model<PlayerAttributes, PlayerCreateAttributes> {
+    declare UserDefinition: UserDefinition;
+}
 
 export class PlayerUpdateAttributes extends PlayerCreateAttributes {}
 
@@ -20,6 +28,9 @@ export default async function init(sequelize: Sequelize) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
+        },
+        user: {
+            type: DataTypes.UUID,
         },
     }, {
         sequelize,
