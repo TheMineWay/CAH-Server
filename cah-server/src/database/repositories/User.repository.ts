@@ -48,6 +48,19 @@ export default class UserRepository extends Repository<UserAttributes, UserCreat
         });
     }
 
+    async setAdminById(id: string, isAdmin: boolean) {
+        return await this.secureContext(async (o) => {
+            return await UserDefinition.update({
+                isAdmin,
+            }, {
+                where: {
+                    id,
+                },
+                ...o,
+            });
+        });
+    }
+
     async getByLogin(login: string, options?: RepositoryQueryOptions<UserAttributes>) {
         return await this.secureContext(async (o) => {
             return UserDefinition.findOne({
