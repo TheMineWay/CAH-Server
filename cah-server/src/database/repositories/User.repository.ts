@@ -10,7 +10,7 @@ export default class UserRepository extends Repository<UserAttributes, UserCreat
 
     async getAll(options?: RepositoryQueryOptions<UserAttributes>) {
         return await this.secureContext(async (o) => {
-            return UserDefinition.findAll({
+            return await UserDefinition.findAll({
                 ...await this.opts(options),
                 ...o,
             });
