@@ -1,4 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
+import { CardDefinition } from "./Card.definition";
 import { PlayerDefinition } from "./Player.definition";
 
 export class InventoryCreateAttributes {
@@ -21,6 +22,7 @@ export class InventoryUpdateAttributes extends InventoryCreateAttributes {}
 
 export class InventoryDefinition extends Model<InventoryAttributes, InventoryCreateAttributes> {
     declare PlayerDefinition: PlayerDefinition;
+    declare CardDefinition: CardDefinition;
 }
 
 export default async function init(sequelize: Sequelize) {
