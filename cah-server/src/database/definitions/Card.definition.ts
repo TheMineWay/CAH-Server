@@ -3,11 +3,13 @@ import { InventoryDefinition } from "./Inventory.definition";
 
 export class CardCreateAttributes {
     declare isBlackCard: boolean;
-    declare content: string;
+    declare content: string[];
 }
 
 export class CardAttributes extends CardCreateAttributes {
     declare id: string;
+
+    declare rawContent: string;
 
     declare createdAt?: Date;
     declare updatedAt?: Date;
@@ -31,14 +33,18 @@ export default async function init(sequelize: Sequelize) {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
-        content: {
+        rawContent: {
             type: DataTypes.STRING(2048),
             allowNull: false,
+            set() {},
+        },
+        content: {
+            type: DataTypes.VIRTUAL,
             set(content: string[]) {
-                this.setDataValue('content', JSON.stringify(content));
+                this.setDataValue('rawContent', JSON.stringify(content));
             },
             get(): string[] {
-                return JSON.parse(this.getDataValue('content'));
+                return JSON.parse(this.getDataValue('rawContent'));
             },
         },
     }, {
