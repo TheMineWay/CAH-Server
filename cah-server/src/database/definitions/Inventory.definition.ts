@@ -34,9 +34,11 @@ export default async function init(sequelize: Sequelize) {
         },
         player: {
             type: DataTypes.UUID,
+            allowNull: false,
         },
         card: {
             type: DataTypes.UUID,
+            allowNull: false,
         },
     }, {
         sequelize,
