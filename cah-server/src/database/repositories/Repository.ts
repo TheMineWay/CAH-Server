@@ -30,6 +30,11 @@ export default abstract class Repository<T, K, M extends Model> {
     }
 
     public async getTransaction() {
+
+        // If it is null, it means transactions are not allowed.
+        // This needs to be explicitly defined when creating the repository instance.
+        if(this.transaction === null) return undefined;
+
         if (this.transaction === undefined) await this.newTransaction({});
         return this.transaction;
     }
