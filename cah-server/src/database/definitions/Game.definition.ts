@@ -2,7 +2,7 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import { PlayerDefinition } from "./Player.definition";
 
 export class GameCreateAttributes {
-
+    declare cardsPerUser: number;
 }
 
 export class GameAttributes extends GameCreateAttributes {
@@ -25,6 +25,11 @@ export default async function init(sequelize: Sequelize) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
+        },
+        cardsPerUser: {
+            type: DataTypes.INTEGER,
+            defaultValue: 7,
+            allowNull: false,
         },
     }, {
         sequelize,
