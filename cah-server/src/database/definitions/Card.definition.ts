@@ -3,6 +3,7 @@ import { InventoryDefinition } from "./Inventory.definition";
 
 export class CardCreateAttributes {
     declare isBlackCard: boolean;
+    declare content: string;
 }
 
 export class CardAttributes extends CardCreateAttributes {
@@ -29,6 +30,16 @@ export default async function init(sequelize: Sequelize) {
         isBlackCard: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+        },
+        content: {
+            type: DataTypes.STRING(2048),
+            allowNull: false,
+            set(content: string[]) {
+                this.setDataValue('content', JSON.stringify(content));
+            },
+            get(): string[] {
+                return JSON.parse(this.getDataValue('content'));
+            },
         },
     }, {
         tableName: 'cards',
