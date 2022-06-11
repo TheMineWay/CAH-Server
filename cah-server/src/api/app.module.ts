@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AdminCardPacksController } from './admin/cardPacks/adminCardPacks.controller';
+import { AdminCardPacksModule } from './admin/cardPacks/adminCardPacks.module';
+import { AdminCardPacksService } from './admin/cardPacks/adminCardPacks.service';
 import { AdminCardsController } from './admin/cards/adminCards.controller';
 import { AdminCardsModule } from './admin/cards/adminCards.module';
 import { AdminCardsService } from './admin/cards/adminCards.service';
@@ -22,6 +25,7 @@ import { UsersService } from './users/users.service';
     ConfigurationModule,
     PermissionsModule,
     AdminCardsModule,
+    AdminCardPacksModule,
   ],
   controllers: [
     AppController,
@@ -29,6 +33,7 @@ import { UsersService } from './users/users.service';
     ConfigurationController,
     PermissionsController,
     AdminCardsController,
+    AdminCardPacksController,
   ],
   providers: [
     AppService,
@@ -38,6 +43,7 @@ import { UsersService } from './users/users.service';
     ConfigurationService,
     PermissionsService,
     AdminCardsService,
+    AdminCardPacksService,
   ],
 })
 export class AppModule {}

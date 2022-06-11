@@ -44,7 +44,7 @@ export default class CardRepository extends Repository<CardAttributes, CardCreat
         });
     }
 
-    public async recoverByid(id: string) {
+    public async recoverById(id: string) {
         return await this.secureContext(async (o) => {
             return await CardDefinition.restore({
                 where: {

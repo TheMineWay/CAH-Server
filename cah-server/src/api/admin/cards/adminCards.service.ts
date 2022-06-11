@@ -22,7 +22,7 @@ export class AdminCardsService {
 
     async recoverCard(id: string) {
         const repository = new CardRepository({});
-        await repository.recoverByid(id);
+        await repository.recoverById(id);
         await repository.commit();
     }
 
