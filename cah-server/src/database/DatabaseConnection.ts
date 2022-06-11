@@ -1,9 +1,14 @@
 import { Sequelize } from "sequelize";
 import getConf from "src/conf/Conf";
+import blackCardInit, { BlackCardDefinition } from "./definitions/BlackCard.definition";
+import cardInit, { CardDefinition } from "./definitions/Card.definition";
 import configurationInit from "./definitions/Configuration.definition";
+import gameInit, { GameDefinition } from "./definitions/Game.definition";
+import inventoryInit, { InventoryDefinition } from "./definitions/Inventory.definition";
+import playerInit, { PlayerDefinition } from "./definitions/Player.definition";
 
 // Inits
-import userInit from "./definitions/User.definition";
+import userInit, { UserDefinition } from "./definitions/User.definition";
 
 export default async function databaseConnect() {
 
@@ -37,11 +42,70 @@ const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
     return [
         userInit,
         configurationInit,
+        playerInit,
+        gameInit,
+        inventoryInit,
+        cardInit,
+        blackCardInit,
     ];
 }
 
 const associate = () => {
+    // Users <--[1:n]--> Players
+    UserDefinition.hasMany(PlayerDefinition, {
+        foreignKey: 'user',
+    });
+    PlayerDefinition.belongsTo(UserDefinition, {
+        foreignKey: 'user',
+    });
+
+    // Games <--[1:n]--> Players
+    GameDefinition.hasMany(PlayerDefinition, {
+        foreignKey: 'game',
+    });
+    PlayerDefinition.belongsTo(GameDefinition, {
+        foreignKey: 'game',
+    });
     
+    // Players <--[1:n]--> Inventory
+    PlayerDefinition.hasMany(InventoryDefinition, {
+        foreignKey: 'player',
+    });
+    InventoryDefinition.belongsTo(PlayerDefinition, {
+        foreignKey: 'player',
+    });
+
+    // Cards <--[1:n]--> Inventory
+    CardDefinition.hasMany(InventoryDefinition, {
+        foreignKey: 'card',
+    });
+    InventoryDefinition.belongsTo(CardDefinition, {
+        foreignKey: 'card',
+    });
+
+    // Cards <--[1:n]--> BlackCard
+    CardDefinition.hasMany(BlackCardDefinition, {
+        foreignKey: 'card',
+    });
+    BlackCardDefinition.belongsTo(CardDefinition, {
+        foreignKey: 'card',
+    });
+
+    // Inventory <--[1:n]--> BlackCard
+    InventoryDefinition.hasMany(BlackCardDefinition, {
+        foreignKey: 'winner',
+    });
+    BlackCardDefinition.belongsTo(InventoryDefinition, {
+        foreignKey: 'winner',
+    });
+
+    // Players <--[1:n]--> BlackCard
+    PlayerDefinition.hasMany(BlackCardDefinition, {
+        foreignKey: 'player',
+    });
+    BlackCardDefinition.belongsTo(PlayerDefinition, {
+        foreignKey: 'player',
+    });
 }
 export class DatabaseState {
     static sequelize: Sequelize;

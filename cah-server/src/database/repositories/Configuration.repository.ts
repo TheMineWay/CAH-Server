@@ -1,7 +1,7 @@
 import { ConfigurationAttributes, ConfigurationCreateAttributes, ConfigurationDefinition, ConfigurationUpdateAttributes } from "../definitions/Configuration.definition";
 import Repository, { RepositoryOptions } from "./Repository";
 
-export default class ConfigurationRepository extends Repository<ConfigurationAttributes, ConfigurationCreateAttributes> {
+export default class ConfigurationRepository extends Repository<ConfigurationAttributes, ConfigurationCreateAttributes, ConfigurationDefinition> {
     
     public constructor(options: RepositoryOptions) {
         super(options);

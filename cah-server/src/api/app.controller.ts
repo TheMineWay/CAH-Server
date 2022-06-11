@@ -7,6 +7,6 @@ export class AppController {
 
   @Get()
   async getHello() {
-    return this.appService.getStatus();
+    return await this.appService.getStatus();
   }
 }

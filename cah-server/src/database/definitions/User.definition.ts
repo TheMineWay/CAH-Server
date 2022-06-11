@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { hashWithSalt } from "src/cryptography/Cryptography";
+import { PlayerDefinition } from "./Player.definition";
 
 export class UserCreateAttributes {
     declare name: string;
@@ -18,7 +19,9 @@ export class UserAttributes extends UserCreateAttributes {
 
 export type UserUpdateAttributes = UserCreateAttributes;
 
-export class UserDefinition extends Model<UserAttributes, UserCreateAttributes> {}
+export class UserDefinition extends Model<UserAttributes, UserCreateAttributes> {
+    declare PlayerDefinitions?: PlayerDefinition[];
+}
 
 export default async function init(sequelize: Sequelize) {
     UserDefinition.init(

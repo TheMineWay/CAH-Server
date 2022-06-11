@@ -1,4 +1,4 @@
-import { FindOptions, Transaction } from "sequelize";
+import { Includeable, Model, Order, Transaction } from "sequelize";
 import { databaseQueryException } from "src/errors/errors";
 import { DatabaseState } from "../DatabaseConnection";
 import { PaginatedRequestOptions, PaginatedRequestProps } from "../DatabasePagination";
@@ -21,7 +21,7 @@ export type SequelizeQueryOptions = {
  * T = Attributes (ex, UserAttributes)
  * K = Create attributes (ex, UserCreateAttributes)
  */
-export default abstract class Repository<T, K> {
+export default abstract class Repository<T, K, M extends Model> {
 
     private transaction?: Transaction | null;
 
@@ -30,7 +30,12 @@ export default abstract class Repository<T, K> {
     }
 
     public async getTransaction() {
-        if(this.transaction === undefined) await this.newTransaction({});
+
+        // If it is null, it means transactions are not allowed.
+        // This needs to be explicitly defined when creating the repository instance.
+        if(this.transaction === null) return undefined;
+
+        if (this.transaction === undefined) await this.newTransaction({});
         return this.transaction;
     }
 
@@ -40,7 +45,7 @@ export default abstract class Repository<T, K> {
 
         // Rollback if necessary
 
-        if(options.rollback) {
+        if (options.rollback) {
             await this.rollback();
         } else {
             await this.commit();
@@ -52,35 +57,46 @@ export default abstract class Repository<T, K> {
     public static async newTransaction() {
         return await generateNewTransaction(DatabaseState.sequelize);
     }
-    
+
     public async commit() {
-        if(!this.transaction) return;
+        if (!this.transaction) return;
         await (await this.getTransaction()).commit();
     }
 
     public async rollback() {
-        if(!this.transaction) return;
+        if (!this.transaction) return;
         await (await this.getTransaction()).rollback();
     }
 
     // Pagination
 
-    protected async getPaginatedRequestOps(options: PaginatedRequestProps<T>): Promise<FindOptions<T>> {
+    protected async getPaginatedRequestOps(options: PaginatedRequestProps<T>): Promise<{
+        limit?: number;
+        offset?: number;
+        order?: [string, 'ASC' | 'DESC' | 'NULLS FIRST'][];
+    }> {
 
         const paginatedOptions = new PaginatedRequestOptions<T>(options);
 
         return {
-            where: paginatedOptions.where(),
             limit: paginatedOptions.limit,
             offset: paginatedOptions.offset,
             order: paginatedOptions.orderBy as [string, 'ASC' | 'DESC' | 'NULLS FIRST'][],
         };
     }
 
-    protected async opts(options?: RepositoryQueryOptions<T>): Promise<FindOptions<T>> {
+    protected async opts(options?: RepositoryQueryOptions<T>): Promise<{
+        include?: Includeable;
+        limit?: number;
+        offset?: number;
+        order?: Order;
+    }> {
         if (!options) return {};
 
         return {
+            include: {
+                all: options.includeAll ? true : undefined,
+            },
             ...(await this.getPaginatedRequestOps(options.includePagination)),
         };
     }
@@ -94,10 +110,10 @@ export default abstract class Repository<T, K> {
             });
 
             // Hardly used, but it might be useful some day
-            if(opts?.autoCommit) await this.commit();
-            
+            if (opts?.autoCommit) await this.commit();
+
             return result;
-        } catch(e: any) {
+        } catch (e: any) {
             await this.rollback();
             databaseQueryException(e);
         }

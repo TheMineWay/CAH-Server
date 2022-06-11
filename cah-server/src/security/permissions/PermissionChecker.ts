@@ -8,7 +8,7 @@ export default async function isAdmin(userId: string) {
     
     if(!user) throw new UnauthorizedException();
 
-    const isAdmin = user.getDataValue('isAdmin');
+    const isAdmin = user.get().isAdmin;
     if(!isAdmin) throw new UnauthorizedException();
 
     return isAdmin;
