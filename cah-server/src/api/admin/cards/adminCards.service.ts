@@ -12,4 +12,16 @@ export class AdminCardsService {
         await repository.commit();
         return card.get();
     }
+
+    async deleteCard(id: string) {
+        const repository = new CardRepository({});
+        await repository.deleteById(id);
+        await repository.commit();
+    }
+
+    async recoverCard(id: string) {
+        const repository = new CardRepository({});
+        await repository.recoverByid(id);
+        await repository.commit();
+    }
 }

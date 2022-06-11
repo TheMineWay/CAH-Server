@@ -31,4 +31,26 @@ export default class CardRepository extends Repository<CardAttributes, CardCreat
             });
         });
     }
+
+    public async deleteById(id: string) {
+        return await this.secureContext(async (o) => {
+            return await CardDefinition.destroy({
+                where: {
+                    id,
+                },
+                ...o,
+            });
+        });
+    }
+
+    public async recoverByid(id: string) {
+        return await this.secureContext(async (o) => {
+            return await CardDefinition.restore({
+                where: {
+                    id,
+                },
+                ...o,
+            });
+        });
+    }
 }
