@@ -94,7 +94,7 @@ const associate = () => {
     });
 
     // Inventory <--[1:n]--> BlackCard
-    InventoryDefinition.hasMany(BlackCardDefinition, {
+    InventoryDefinition.hasOne(BlackCardDefinition, {
         foreignKey: 'winner',
     });
     BlackCardDefinition.belongsTo(InventoryDefinition, {
