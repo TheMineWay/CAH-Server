@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Param, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
-import { isString } from 'lodash';
 import { JwtAuthGuard } from 'src/api/auth/guards/jwt-auth.guard';
 import { CardAttributes } from 'src/database/definitions/Card.definition';
 import { CreateCardDTO } from 'src/models/dtos/Card.dtos';
@@ -20,14 +19,12 @@ export class AdminCardsController {
     @Delete(':id')
     async deleteCard(@Param(new ValidationPipe({ whitelist: true })) params: { id: string }, @Request() req) {
         await isAdmin(req.user.id);
-        if(!isString(params.id)) throw "Format error";
         await this.adminCardsService.deleteCard(params.id);
     }
 
     @Post('/recover/:id')
     async recoverCard(@Param(new ValidationPipe({ whitelist: true })) params: { id: string }, @Request() req) {
         await isAdmin(req.user.id);
-        if(!isString(params.id)) throw "Format error";
         await this.adminCardsService.recoverCard(params.id);
     }
 }
