@@ -1,4 +1,5 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
+import { BlackCardDefinition } from "./BlackCard.definition";
 import { CardPackDefinition } from "./CardPack.definition";
 import { InventoryDefinition } from "./Inventory.definition";
 
@@ -22,6 +23,7 @@ export class CardUpdateAttributes extends CardCreateAttributes {}
 
 export class CardDefinition extends Model<CardAttributes, CardCreateAttributes> {
     declare InventoryDefinitions: InventoryDefinition[];
+    declare BlackCardDefinitions: BlackCardDefinition[];
     declare CardPackDefinition: CardPackDefinition;
 }
 
