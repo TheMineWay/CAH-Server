@@ -11,7 +11,7 @@ export class AdminCardsController {
     constructor(private readonly adminCardsService: AdminCardsService) { }
 
     @Post('new')
-    async set(@Body(new ValidationPipe()) card: CreateCardDTO, @Request() req): Promise<CardAttributes> {
+    async set(@Body(new ValidationPipe({ whitelist: true })) card: CreateCardDTO, @Request() req): Promise<CardAttributes> {
         await isAdmin(req.user.id);
         return await this.adminCardsService.createCard(card);
     }
