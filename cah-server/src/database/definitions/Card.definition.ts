@@ -1,9 +1,11 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
+import { CardPackDefinition } from "./CardPack.definition";
 import { InventoryDefinition } from "./Inventory.definition";
 
 export class CardCreateAttributes {
     declare isBlackCard: boolean;
     declare content: string[];
+    declare pack: string; // CardPackDefinition
 }
 
 export class CardAttributes extends CardCreateAttributes {
@@ -20,6 +22,7 @@ export class CardUpdateAttributes extends CardCreateAttributes {}
 
 export class CardDefinition extends Model<CardAttributes, CardCreateAttributes> {
     declare InventoryDefinitions: InventoryDefinition[];
+    declare CardPackDefinition: CardPackDefinition;
 }
 
 export default async function init(sequelize: Sequelize) {
@@ -46,6 +49,10 @@ export default async function init(sequelize: Sequelize) {
             get(): string[] {
                 return JSON.parse(this.getDataValue('rawContent'));
             },
+        },
+        pack: {
+            type: DataTypes.UUID,
+            allowNull: false,
         },
     }, {
         tableName: 'cards',
