@@ -13,3 +13,10 @@ export function formatError(e?: any) {
         406,
     );
 }
+
+export function iAmATeaPotError(e?: any) {
+    throw new HttpException(
+        'I am a teapot!',
+        418,
+    );
+}
