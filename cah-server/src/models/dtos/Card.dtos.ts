@@ -41,3 +41,11 @@ export class UpdateCardDTO implements CardUpdateAttributes {
     @IsUUID('4')
     pack: string;
 }
+
+export class ImportCardsDTO {
+    @IsArray()
+    @ValidateNested({each: true})
+    @ArrayMinSize(1)
+    @Type(() => CreateCardDTO)
+    cards: CreateCardDTO[]
+}

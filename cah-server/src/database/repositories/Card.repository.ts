@@ -15,6 +15,12 @@ export default class CardRepository extends Repository<CardAttributes, CardCreat
         });
     }
 
+    public async bulkCreate(cards: CardCreateAttributes[]) {
+        return await this.secureContext(async (o) => {
+            return await CardDefinition.bulkCreate(cards, o);
+        });
+    }
+
     public async getById(id: string, options?: RepositoryQueryOptions<CardAttributes>) {
         return await this.secureContext(async (o) => {
             return await CardDefinition.findByPk(id, {

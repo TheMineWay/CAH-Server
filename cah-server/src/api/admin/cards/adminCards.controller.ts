@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/api/auth/guards/jwt-auth.guard';
 import { CardAttributes } from 'src/database/definitions/Card.definition';
-import { CreateCardDTO, UpdateCardDTO } from 'src/models/dtos/Card.dtos';
+import { CreateCardDTO, ImportCardsDTO, UpdateCardDTO } from 'src/models/dtos/Card.dtos';
 import isAdmin from 'src/permissions/PermissionsChecker';
 import { AdminCardsService } from './adminCards.service';
 
@@ -38,5 +38,11 @@ export class AdminCardsController {
     async getById(@Param() params: { id: string }, @Request() req) {
         await isAdmin(req.user.id);
         return await this.adminCardsService.getById(params.id);
+    }
+
+    @Post('import')
+    async import(@Body(new ValidationPipe({ whitelist: true })) cardImport: ImportCardsDTO, @Request() req) {
+        await isAdmin(req.user.id);
+        return await this.adminCardsService.importCards(cardImport);
     }
 }
