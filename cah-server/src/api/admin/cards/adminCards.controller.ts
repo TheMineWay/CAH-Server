@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/api/auth/guards/jwt-auth.guard';
 import { CardAttributes } from 'src/database/definitions/Card.definition';
 import { CreateCardDTO, UpdateCardDTO } from 'src/models/dtos/Card.dtos';
@@ -32,5 +32,11 @@ export class AdminCardsController {
     async recoverCard(@Param() params: { id: string }, @Request() req) {
         await isAdmin(req.user.id);
         await this.adminCardsService.recoverCard(params.id);
+    }
+
+    @Get('/card/:id')
+    async getById(@Param() params: { id: string }, @Request() req) {
+        await isAdmin(req.user.id);
+        return await this.adminCardsService.getById(params.id);
     }
 }

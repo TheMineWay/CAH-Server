@@ -32,4 +32,10 @@ export class AdminCardsService {
         await repository.commit();
         return card.get();
     }
+
+    async getById(id: string) {
+        const repository = new CardRepository({ transaction: null });
+        const card = await repository.getById(id);
+        return card.get();
+    }
 }
