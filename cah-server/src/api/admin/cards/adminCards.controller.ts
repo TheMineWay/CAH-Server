@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Param, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/api/auth/guards/jwt-auth.guard';
 import { CardAttributes } from 'src/database/definitions/Card.definition';
-import { CreateCardDTO } from 'src/models/dtos/Card.dtos';
+import { CreateCardDTO, UpdateCardDTO } from 'src/models/dtos/Card.dtos';
 import isAdmin from 'src/permissions/PermissionsChecker';
 import { AdminCardsService } from './adminCards.service';
 
@@ -17,13 +17,19 @@ export class AdminCardsController {
     }
 
     @Delete(':id')
-    async deleteCard(@Param(new ValidationPipe({ whitelist: true })) params: { id: string }, @Request() req) {
+    async deleteCard(@Param() params: { id: string }, @Request() req) {
         await isAdmin(req.user.id);
         await this.adminCardsService.deleteCard(params.id);
     }
 
+    @Post('update/:id')
+    async updateCard(@Param() params: { id: string }, @Body(new ValidationPipe({ whitelist: true })) card: UpdateCardDTO, @Request() req) {
+        await isAdmin(req.user.id);
+        return await this.adminCardsService.updateCard(params.id, card);
+    }
+
     @Post('/recover/:id')
-    async recoverCard(@Param(new ValidationPipe({ whitelist: true })) params: { id: string }, @Request() req) {
+    async recoverCard(@Param() params: { id: string }, @Request() req) {
         await isAdmin(req.user.id);
         await this.adminCardsService.recoverCard(params.id);
     }

@@ -1,3 +1,4 @@
+import { UpdateCardDTO } from "src/models/dtos/Card.dtos";
 import { CardAttributes, CardCreateAttributes, CardDefinition } from "../definitions/Card.definition";
 import Repository, { RepositoryOptions, RepositoryQueryOptions } from "./Repository";
 
@@ -51,6 +52,13 @@ export default class CardRepository extends Repository<CardAttributes, CardCreat
                 },
                 ...o,
             });
+        });
+    }
+
+    public async updateById(id: string, data: UpdateCardDTO) {
+        return await this.secureContext(async (o) => {
+            const card = await CardDefinition.findByPk(id, o);
+            return await card.update(data, o);
         });
     }
 }

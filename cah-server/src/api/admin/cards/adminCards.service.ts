@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CardUpdateAttributes } from 'src/database/definitions/Card.definition';
 import CardRepository from 'src/database/repositories/Card.repository';
 import { CreateCardDTO } from 'src/models/dtos/Card.dtos';
 
@@ -23,5 +24,12 @@ export class AdminCardsService {
         const repository = new CardRepository({});
         await repository.recoverByid(id);
         await repository.commit();
+    }
+
+    async updateCard(id: string, data: CardUpdateAttributes) {
+        const repository = new CardRepository({});
+        const card = await repository.updateById(id, data);
+        await repository.commit();
+        return card.get();
     }
 }
