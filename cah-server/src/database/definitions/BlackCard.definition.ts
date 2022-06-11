@@ -46,6 +46,7 @@ export default async function init(sequelize: Sequelize) {
         winner: {
             type: DataTypes.UUID,
             allowNull: true,
+            unique: true,
         },
     }, {
         tableName: 'blackCard',

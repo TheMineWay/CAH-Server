@@ -1,4 +1,5 @@
 import { Model, Sequelize, DataTypes } from "sequelize";
+import { BlackCardDefinition } from "./BlackCard.definition";
 import { GameDefinition } from "./Game.definition";
 import { InventoryDefinition } from "./Inventory.definition";
 import { UserDefinition } from "./User.definition";
@@ -23,6 +24,7 @@ export class PlayerDefinition extends Model<PlayerAttributes, PlayerCreateAttrib
     declare UserDefinition: UserDefinition;
     declare GameDefinition: GameDefinition;
     declare InventoryDefinitions: InventoryDefinition[];
+    declare BlackCardDefinitions: BlackCardDefinition[];
 }
 
 export class PlayerUpdateAttributes extends PlayerCreateAttributes {}

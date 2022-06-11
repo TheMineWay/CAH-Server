@@ -2,10 +2,12 @@ import { Sequelize } from "sequelize";
 import getConf from "src/conf/Conf";
 import blackCardInit, { BlackCardDefinition } from "./definitions/BlackCard.definition";
 import cardInit, { CardDefinition } from "./definitions/Card.definition";
+import cardPackInit, { CardPackDefinition } from "./definitions/CardPack.definition";
 import configurationInit from "./definitions/Configuration.definition";
 import gameInit, { GameDefinition } from "./definitions/Game.definition";
 import inventoryInit, { InventoryDefinition } from "./definitions/Inventory.definition";
 import playerInit, { PlayerDefinition } from "./definitions/Player.definition";
+import packsInUseInit, { PacksInUseDefinition } from "./definitions/PacksInUse.definition";
 
 // Inits
 import userInit, { UserDefinition } from "./definitions/User.definition";
@@ -47,6 +49,8 @@ const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
         inventoryInit,
         cardInit,
         blackCardInit,
+        cardPackInit,
+        packsInUseInit,
     ];
 }
 
@@ -92,7 +96,7 @@ const associate = () => {
     });
 
     // Inventory <--[1:n]--> BlackCard
-    InventoryDefinition.hasMany(BlackCardDefinition, {
+    InventoryDefinition.hasOne(BlackCardDefinition, {
         foreignKey: 'winner',
     });
     BlackCardDefinition.belongsTo(InventoryDefinition, {
@@ -105,6 +109,30 @@ const associate = () => {
     });
     BlackCardDefinition.belongsTo(PlayerDefinition, {
         foreignKey: 'player',
+    });
+
+    // CardPack <--[1:n]--> Cards
+    CardPackDefinition.hasMany(CardDefinition, {
+        foreignKey: 'pack',
+    });
+    CardDefinition.belongsTo(CardPackDefinition, {
+        foreignKey: 'pack',
+    });
+
+    // Games <--[1:n]--> PacksInUse
+    GameDefinition.hasMany(PacksInUseDefinition, {
+        foreignKey: 'game',
+    });
+    PacksInUseDefinition.belongsTo(GameDefinition, {
+        foreignKey: 'game',
+    });
+
+    // CardPacks <--[1:n]--> PacksInUse
+    CardPackDefinition.hasMany(PacksInUseDefinition, {
+        foreignKey: 'pack',
+    });
+    PacksInUseDefinition.belongsTo(CardPackDefinition, {
+        foreignKey: 'pack',
     });
 }
 export class DatabaseState {
