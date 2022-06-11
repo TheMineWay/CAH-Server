@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import getConf from "src/conf/Conf";
+import blackCardInit, { BlackCardDefinition } from "./definitions/BlackCard.definition";
 import cardInit, { CardDefinition } from "./definitions/Card.definition";
 import configurationInit from "./definitions/Configuration.definition";
 import gameInit, { GameDefinition } from "./definitions/Game.definition";
@@ -45,6 +46,7 @@ const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
         gameInit,
         inventoryInit,
         cardInit,
+        blackCardInit,
     ];
 }
 
@@ -79,6 +81,30 @@ const associate = () => {
     });
     InventoryDefinition.belongsTo(CardDefinition, {
         foreignKey: 'card',
+    });
+
+    // Cards <--[1:n]--> BlackCard
+    CardDefinition.hasMany(BlackCardDefinition, {
+        foreignKey: 'card',
+    });
+    BlackCardDefinition.belongsTo(CardDefinition, {
+        foreignKey: 'card',
+    });
+
+    // Inventory <--[1:n]--> BlackCard
+    InventoryDefinition.hasMany(BlackCardDefinition, {
+        foreignKey: 'winner',
+    });
+    BlackCardDefinition.belongsTo(InventoryDefinition, {
+        foreignKey: 'winner',
+    });
+
+    // Players <--[1:n]--> BlackCard
+    PlayerDefinition.hasMany(BlackCardDefinition, {
+        foreignKey: 'player',
+    });
+    BlackCardDefinition.belongsTo(PlayerDefinition, {
+        foreignKey: 'player',
     });
 }
 export class DatabaseState {
