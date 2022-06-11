@@ -6,7 +6,7 @@ import isAdmin from 'src/permissions/PermissionsChecker';
 import { AdminCardPacksService } from './adminCardPacks.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('admin/packs')
+@Controller('admin/card-packs')
 export class AdminCardPacksController {
     constructor(private readonly adminCardPacksService: AdminCardPacksService) { }
 
