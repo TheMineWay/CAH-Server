@@ -1,11 +1,12 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
+import { CardContentDTO } from "src/models/dtos/Card.dtos";
 import { BlackCardDefinition } from "./BlackCard.definition";
 import { CardPackDefinition } from "./CardPack.definition";
 import { InventoryDefinition } from "./Inventory.definition";
 
 export class CardCreateAttributes {
     declare isBlackCard: boolean;
-    declare content: string[];
+    declare content: CardContentDTO[];
     declare pack: string; // CardPackDefinition
 }
 
