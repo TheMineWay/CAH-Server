@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
+import { PacksInUseDefinition } from "./PacksInUse.definition";
 import { PlayerDefinition } from "./Player.definition";
 
 export class GameCreateAttributes {
@@ -17,6 +18,7 @@ export class GameUpdateAttributes extends GameCreateAttributes {}
 
 export class GameDefinition extends Model<GameAttributes, GameCreateAttributes> {
     declare PlayerDefinitions: PlayerDefinition[];
+    declare PacksInUseDefinitions: PacksInUseDefinition[];
 }
 
 export default async function init(sequelize: Sequelize) {

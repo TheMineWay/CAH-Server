@@ -7,6 +7,7 @@ import configurationInit from "./definitions/Configuration.definition";
 import gameInit, { GameDefinition } from "./definitions/Game.definition";
 import inventoryInit, { InventoryDefinition } from "./definitions/Inventory.definition";
 import playerInit, { PlayerDefinition } from "./definitions/Player.definition";
+import packsInUseInit, { PacksInUseDefinition } from "./definitions/PacksInUse.definition";
 
 // Inits
 import userInit, { UserDefinition } from "./definitions/User.definition";
@@ -49,6 +50,7 @@ const getAllInits = (): ((sequelize: Sequelize) => Promise<void>)[] => {
         cardInit,
         blackCardInit,
         cardPackInit,
+        packsInUseInit,
     ];
 }
 
@@ -114,6 +116,22 @@ const associate = () => {
         foreignKey: 'pack',
     });
     CardDefinition.belongsTo(CardPackDefinition, {
+        foreignKey: 'pack',
+    });
+
+    // Games <--[1:n]--> PacksInUse
+    GameDefinition.hasMany(PacksInUseDefinition, {
+        foreignKey: 'game',
+    });
+    PacksInUseDefinition.belongsTo(GameDefinition, {
+        foreignKey: 'game',
+    });
+
+    // CardPacks <--[1:n]--> PacksInUse
+    CardPackDefinition.hasMany(PacksInUseDefinition, {
+        foreignKey: 'pack',
+    });
+    PacksInUseDefinition.belongsTo(CardPackDefinition, {
         foreignKey: 'pack',
     });
 }
