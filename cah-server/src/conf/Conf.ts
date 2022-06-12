@@ -10,6 +10,7 @@ class Conf {
             'databasePassword',
             'databaseUsername',
             'databaseLogging',
+            'port',
         ];
         Object.assign(this, lodash.pick(obj, pick));
     }
@@ -23,6 +24,7 @@ class Conf {
     databaseUsername!: string;
     databaseName!: string;
     databaseLogging!: 'true' | 'false';
+    port!: string;
 }
 
 export default function getConf() {
