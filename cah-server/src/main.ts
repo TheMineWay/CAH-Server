@@ -22,6 +22,8 @@ async function bootstrap() {
       'POST',
       'DELETE',
       'PUT',
+      'OPTIONS',
+      'HEAD',
     ],
   });
   await app.listen(parseInt(conf.port));
