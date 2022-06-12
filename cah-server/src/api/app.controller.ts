@@ -9,4 +9,9 @@ export class AppController {
   async getHello() {
     return await this.appService.getStatus();
   }
+
+  @Get('/info')
+  async getInfo() {
+    return this.appService.getInfo();
+  }
 }
