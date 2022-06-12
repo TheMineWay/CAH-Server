@@ -13,6 +13,17 @@ async function bootstrap() {
   // End init
 
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: '*',
+    optionsSuccessStatus: 200,
+    methods: [
+      'GET',
+      'POST',
+      'DELETE',
+      'PUT',
+    ],
+  });
   await app.listen(parseInt(conf.port));
 }
 bootstrap();
