@@ -3,6 +3,7 @@ type StaticInfo = {
         number: string;
         isStable: boolean;
     },
+    service: string;
 }
 
 export default function getServerInfo(): StaticInfo {
@@ -11,5 +12,6 @@ export default function getServerInfo(): StaticInfo {
             number: '0.0.1',
             isStable: false,
         },
+        service: "cards-against-humanity",
     };
 }
